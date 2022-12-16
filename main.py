@@ -1,36 +1,10 @@
 from fastapi import FastAPI
 from core import models_, dbconfig
-from routers import course, course_type, subject, university
+from routers import course, course_type, subject, university, root
+from decouple import config
 
 
-description = \
-"""
-This API provides suitable courses to university education aspirants.
-
-Provides access to the following entities:-
-
-##Courses
-
-You can **see courses** included
-
-##Subjects
-
-You can **see subjects** included
-
-##Course Types
-
-You can **see course types** included
-
-##Universities
-
-You can **see universities** included
-
-##Grades
-
-You can **see grades** used
-
-"""
-tags_metadata = [
+TAG_META_DATA = [
     {
         'name': 'Root',
         'description': "Navigates to API's root"
@@ -55,58 +29,15 @@ tags_metadata = [
 ]
 
 app = FastAPI(
-    title="UG-COURSE API",
-    # description=description,
+    title=config('API_NAME'),
     version='1.0.0',
-    openapi_tags=tags_metadata
+    openapi_tags=TAG_META_DATA
 )
 
 models_.Base.metadata.create_all(bind=dbconfig.engine)
 
 
-@app.get('/', tags=["Root"])
-@app.get('/api', tags=['Root'])
-def root():
-    response = {
-        "api name": "UG-COURSE API",
-        "description": "Find out the feassible university courses by providing UCE and UACE results.",
-        "input required": {
-  "uce": {
-    "english": "string",
-    "mathematics": "string",
-    "others": [
-      "string",
-      "string",
-      "string",
-      "string",
-      "string",
-      "string",
-      "string"
-    ]
-  },
-  "uace": {
-    "gen_paper": "string",
-    "subsidiary": "string",
-    "main_subjects": [
-      {
-        "subject": "Mathematics",
-        "grade": "F"
-      },
-      {
-        "subject": "Mathematics",
-        "grade": "F"
-      },
-      {
-        "subject": "Mathematics",
-        "grade": "F"
-      }
-    ]
-  }
-}
-        
-    }
-    return response
-
+app.include_router(router=root.router)
 app.include_router(router=university.router)
 app.include_router(router=subject.router)
 app.include_router(router=course_type.router)

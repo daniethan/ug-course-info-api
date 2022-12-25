@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from core import models_, dbconfig
-from routers import course, course_type, subject, university, root
+from routers import course, course_type, subject, university, root, combinations
 from decouple import config
 
 
@@ -42,6 +42,7 @@ app.include_router(router=university.router)
 app.include_router(router=subject.router)
 app.include_router(router=course_type.router)
 app.include_router(router=course.router)
+app.include_router(router=combinations.router)
 
 
 

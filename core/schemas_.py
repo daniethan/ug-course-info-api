@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Dict
 from pydantic import BaseModel, Field
 
 
@@ -114,6 +114,20 @@ class UCEResultIn(BaseModel):
     others: List[str] = Field(..., min_items=7, max_items=8)
 
 
+class CombinationResultIn(BaseModel):
+    English: str = Field(...)
+    Mathematics: str = Field(...)
+    Physics: str = Field(...)
+    Chemistry: str = Field(...)
+    Biology: str = Field(...)
+    Geography: str = Field(...)
+    History: str = Field(...)
+    others: Dict[str,str]
+
+class CombinationOut(BaseModel):
+    name: str
+    subjects: list[str] = Field(..., min_items=3,max_items=4)
+    
 class UACEResult(BaseModel):
     subject: str = Field(default='Mathematics')
     grade: str = Field(default='F', min_length=1, max_length=1)
@@ -122,6 +136,12 @@ class UACEResultIn(BaseModel):
     gen_paper: str
     subsidiary: str
     main_subjects: List[UACEResult] = Field(..., min_items=3, max_items=3)
+
+class PLEResultIn(BaseModel):
+    eng: str
+    mtc: str
+    sci: str
+    sst: str
 
 
 class FeaturedCourseOut(BaseModel):
@@ -145,3 +165,9 @@ class ShowSubjectName(BaseModel):
 
     class Config:
         orm_mode = True
+
+class UACESubjectCombination(BaseModel):
+    name: str = Field(..., min_length=8, max_length=10, description="Initials of the subject combination")
+    main_subjects: List[ShowSubjectName] = Field(..., title='principal subjects')
+    subsidiary_subjects: List[ShowSubjectName] = Field(..., title='subsidiary subjects')
+    score_projection: int = Field(..., title="predicted uneb score")

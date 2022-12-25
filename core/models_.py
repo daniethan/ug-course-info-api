@@ -26,6 +26,7 @@ class Subject(Base):
     code = Column(String(5), unique=True, nullable=False)
     is_adv = Column(Boolean, nullable=False, default=False)
     at_both_levels = Column(Boolean, nullable=False, default=True)
+    # is_sci = Column(Boolean, default=False)
 
     essentials = relationship('EssentialSubject', back_populates='subject')
     relevants = relationship('RelevantSubject', back_populates='subject')

@@ -127,8 +127,8 @@ class UACECombinationBuilder:
         return grade in range(1, UACECombinationBuilder.WORST_GRADE + 1)
     
     #fetch subject code from database
-    async def _get_subject_code(self, subject_name: str) -> str|None:
-        subject: Subject|None = self.db.query(Subject).filter(Subject.name==subject_name.title()).first()
+    async def _get_subject_code(self, subject_name: str) ->Union[str,None]:
+        subject: Union[Subject,None ]= self.db.query(Subject).filter(Subject.name==subject_name.title()).first()
         return subject.code if subject is not None else None
 
     #create a dictionary of subject codes against their fullnames
@@ -146,7 +146,7 @@ class UACECombinationBuilder:
         for key in self.uce_res.keys():
             grade_int = int(self.uce_res.get(key,'0')[-1])
             if self._check_grade(grade_int):
-                subj_code: str|None = await self._get_subject_code(subject_name=key)
+                subj_code:Union[ str,None ]= await self._get_subject_code(subject_name=key)
                 if subj_code is not None:
                     clean_uce_res[subj_code] = self.uce_res.get(key)
         return clean_uce_res
@@ -186,7 +186,7 @@ class UACECombinationBuilder:
     async def _build(self, subjects: set):
         available_combinations = list()
         
-        def _create_arrangement(subj: list|tuple):
+        def _create_arrangement(subj: Union[list,tuple]):
             return "".join((x[0] for x in subj))
 
         if len(subjects) >= 3:

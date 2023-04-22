@@ -96,6 +96,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+.space
 .env
 .venv
 env/
@@ -123,6 +124,7 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+Spacefile
 
 # Pyre type checker
 .pyre/
@@ -132,3 +134,5 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+.space

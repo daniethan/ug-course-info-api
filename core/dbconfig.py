@@ -22,7 +22,8 @@ SessionLocal = sessionmaker(
     )
 
 #create Base class for app models to inherit from.
-Base = declarative_base(bind=engine)
+# Base = declarative_base(bind=engine)
+Base = declarative_base()
 
 #create a generator function to generate a session whenever called 
 # and can automatically close the session when no longer needed.

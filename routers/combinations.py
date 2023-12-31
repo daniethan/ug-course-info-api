@@ -6,10 +6,7 @@ from core import dbconfig, schemas_
 from repository import combinations
 
 
-router = APIRouter(
-    prefix='/combinations',
-    tags=['Combinations']
-)
+router = APIRouter(prefix="/combinations", tags=["Combinations"])
 
 
 # @router.get('/', response_model=List[schemas_.ShowCourse])
@@ -35,6 +32,13 @@ router = APIRouter(
 # def update_course(request: schemas_.CourseUpdate, db: Session=Depends(dbconfig.get_session)):
 #     return course.update(request, db)
 
-@router.post('/fit-combinations', status_code=status.HTTP_200_OK, response_model=List[schemas_.CombinationOut])
-async def get_combinations(uce: schemas_.CombinationResultIn, db: Session=Depends(dbconfig.get_session)):
+
+@router.post(
+    "/fit-combinations",
+    status_code=status.HTTP_200_OK,
+    response_model=List[schemas_.CombinationOut],
+)
+async def get_combinations(
+    uce: schemas_.CombinationResultIn, db: Session = Depends(dbconfig.get_session)
+):
     return await combinations.generate_combinations(uce.dict(), db)

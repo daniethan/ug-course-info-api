@@ -1,16 +1,9 @@
 from fastapi import APIRouter
 from repository import root
 
-router = APIRouter(
-    prefix='',
-    tags=['Root']
-)
+router = APIRouter(tags=["Root"])
 
-@router.get('/')
+
+@router.get("/docs")
 def home():
     return root.homepage()
-
-@router.get('/api')
-def home():
-    return root.homepage()
-

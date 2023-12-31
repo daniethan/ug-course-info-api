@@ -1,10 +1,13 @@
+import os
 from contextlib import _AsyncGeneratorContextManager, asynccontextmanager
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from core.models_ import Base
 from core.dbconfig import engine
 from routers import course, course_type, subject, university, root, combinations
-from decouple import config
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 TAG_META_DATA = [
@@ -24,7 +27,7 @@ TAG_META_DATA = [
     },
 ]
 
-API_ROUTE_PREFIX = config("API_VER_PREFIX")
+API_ROUTE_PREFIX = os.environ.get("API_VER_PREFIX")
 
 
 @asynccontextmanager
@@ -38,13 +41,13 @@ async def lifespan(app: FastAPI) -> _AsyncGeneratorContextManager[None]:
 
 app = FastAPI(
     lifespan=lifespan,
-    title=config("API_NAME"),
+    title=os.environ.get("API_NAME"),
     version="1.0.0",
     openapi_tags=TAG_META_DATA,
 )
 
 
-@app.get(path=API_ROUTE_PREFIX, tags=["Root"], include_in_schema=False)
+@app.get(path="/", tags=["Root"], include_in_schema=False)
 async def index():
     return RedirectResponse(url="/docs")
 

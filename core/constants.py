@@ -3,14 +3,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-PLE_RESULT_FORMAT = {
+API_DESCRIPTION: str = (
+    "Find out the feasible university courses by providing UCE and UACE results."
+)
+
+API_ROUTE_PREFIX: str = "/api/v1"
+
+API_TITLE: str = "UNIVERSITY COURSE API UG"
+
+DATABASE_URI: str = os.environ.get("DATABASE")
+
+PLE_RESULT_FORMAT: dict = {
     "english": "string",
     "mathematics": "string",
     "science": "string",
     "social studies": "string",
 }
 
-UCE_RESULT_FORMAT = {
+UCE_RESULT_FORMAT: dict = {
     "english": "string",
     "mathematics": "string",
     "others": [
@@ -18,7 +28,7 @@ UCE_RESULT_FORMAT = {
     ],
 }
 
-UACE_RESULT_FORMAT = {
+UACE_RESULT_FORMAT: dict = {
     "gen_paper": "string",
     "subsidiary": "string",
     "main_subjects": [
@@ -27,12 +37,3 @@ UACE_RESULT_FORMAT = {
         {"subject": "subject-name", "grade": "grade-letter"},
     ],
 }
-
-
-def homepage():
-    response = {
-        "api name": os.environ.get("API_NAME"),
-        "description": os.environ.get("API_DESCRIPTION"),
-        "input required": {"uce": UCE_RESULT_FORMAT, "uace": UACE_RESULT_FORMAT},
-    }
-    return response

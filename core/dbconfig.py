@@ -1,12 +1,11 @@
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
 
-load_dotenv()
+from core.constants import DATABASE_URI
 
-SQLALCHEMY_DB_URI = f"sqlite:///core/{os.environ.get('DATABASE')}"
+
+SQLALCHEMY_DB_URI = f"sqlite:///core/{DATABASE_URI}"
 
 # create engine which creates a connection to the database and also facilitate for running of SQL on the DB
 engine = create_engine(

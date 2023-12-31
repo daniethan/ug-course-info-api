@@ -1,44 +1,43 @@
 from typing import List, Optional, Union, Dict
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class University(BaseModel):
     name: str
     code: str
     district: str
-    
-    class Config:
-        orm_mode=True
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CourseTypeOut(BaseModel):
     name: str
-    
-    class Config:
-        orm_mode=True
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Course(BaseModel):
     name: str
     code: str
-    univ_code: Optional[str] = Field(default='MAK')
-    cut_off_male:float
-    cut_off_female:float
+    univ_code: Optional[str] = Field(default="MAK")
+    cut_off_male: float
+    cut_off_female: float
 
-    class Config:
-        orm_mode=True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CourseIn(Course):
-    course_type: Optional[str] = Field(default='HUM')
-        
+    course_type: Optional[str] = Field(default="HUM")
+
+
 class CourseUpdate(BaseModel):
     course: str
-    name: Optional[Union[str,None]] = None
-    code: Optional[Union[str,None]] = None
-    cut_off_male: Optional[Union[str,None]] = None
-    cut_off_female: Optional[Union[str,None]] = None
-    course_type: Optional[Union[str,None]] = None
+    name: Optional[Union[str, None]] = None
+    code: Optional[Union[str, None]] = None
+    cut_off_male: Optional[Union[str, None]] = None
+    cut_off_female: Optional[Union[str, None]] = None
+    course_type: Optional[Union[str, None]] = None
+
 
 class CourseOut(Course):
     coursetype: CourseTypeOut
@@ -48,8 +47,7 @@ class CourseSubjectIn(BaseModel):
     subject_name: str
     course_code: str
 
-    class Config:
-        orm_mode=True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CourseType(CourseTypeOut):
@@ -59,8 +57,7 @@ class CourseType(CourseTypeOut):
 class ShowCourseSubject(BaseModel):
     name: str
 
-    class Config:
-        orm_mode=True   
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CourseSubject(BaseModel):
@@ -69,7 +66,7 @@ class CourseSubject(BaseModel):
     desirable: List[str] = Field(default=[])
 
     class Config:
-        orma_mode=True
+        orma_mode = True
 
 
 class Subject(BaseModel):
@@ -78,18 +75,17 @@ class Subject(BaseModel):
     is_adv: Optional[bool] = Field(default=False)
     at_both_levels: Optional[bool] = Field(default=True)
 
-    class Config:
-        orm_mode=True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ShowCourseType(CourseType):
-    courses: List[str] 
+    courses: List[str]
 
 
 class CourseMod(Course):
     subjects: CourseSubject
     coursetype: str
-    
+
 
 class ShowCourse(CourseMod):
     university: University
@@ -100,7 +96,7 @@ class ShowUniversity(University):
 
 
 class ShowSubject(Subject):
-    courses: List[str]= []
+    courses: List[str] = []
 
 
 class GradeOut(BaseModel):
@@ -122,20 +118,24 @@ class CombinationResultIn(BaseModel):
     Biology: str = Field(...)
     Geography: str = Field(...)
     History: str = Field(...)
-    others: Dict[str,str]
+    others: Dict[str, str]
+
 
 class CombinationOut(BaseModel):
     name: str
-    subjects: list[str] = Field(..., min_items=3,max_items=4)
-    
+    subjects: list[str] = Field(..., min_items=3, max_items=4)
+
+
 class UACEResult(BaseModel):
-    subject: str = Field(default='Mathematics')
-    grade: str = Field(default='F', min_length=1, max_length=1)
+    subject: str = Field(default="Mathematics")
+    grade: str = Field(default="F", min_length=1, max_length=1)
+
 
 class UACEResultIn(BaseModel):
     gen_paper: str
     subsidiary: str
     main_subjects: List[UACEResult] = Field(..., min_items=3, max_items=3)
+
 
 class PLEResultIn(BaseModel):
     eng: str
@@ -148,26 +148,29 @@ class FeaturedCourseOut(BaseModel):
     weight: float
     course: ShowCourse
 
-    class Config:
-        orm_mode=True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ResultIn(BaseModel):
     uce: UCEResultIn
     uace: List[UACEResultIn]
-    
-    class Config:
-        orm_mode = True
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ShowSubjectName(BaseModel):
     name: str
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
+
 
 class UACESubjectCombination(BaseModel):
-    name: str = Field(..., min_length=8, max_length=10, description="Initials of the subject combination")
-    main_subjects: List[ShowSubjectName] = Field(..., title='principal subjects')
-    subsidiary_subjects: List[ShowSubjectName] = Field(..., title='subsidiary subjects')
+    name: str = Field(
+        ...,
+        min_length=8,
+        max_length=10,
+        description="Initials of the subject combination",
+    )
+    main_subjects: List[ShowSubjectName] = Field(..., title="principal subjects")
+    subsidiary_subjects: List[ShowSubjectName] = Field(..., title="subsidiary subjects")
     score_projection: int = Field(..., title="predicted uneb score")
